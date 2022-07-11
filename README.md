@@ -4,7 +4,7 @@
 
 ### 1) Cloná el proyecto: git clone https://github.com/AibarHernanEzequiel/CanDoIT.git
 ### 2) Instalá IntelliJ IDEA Ultimate(Es el IDE utilizado) o Eclipse
-### 3) Descargar e Instala apache tomcat 8.0.5. Url: https://tomcat.apache.org/download-80.cgi
+### 3) Descargar e Instala apache tomcat 8.0.5. Url: https://tomcat.apache.org/download-80.cgi (descargar versión core).
 ### 4) Configurá el servior en el caso de intellij:
     ## 4.0) Click derecho en el proyecto, luego clickear en 'Open Module Settings'
     ## 4.1) En "Artefacts" dar click en el + y agregá uno del tipo Web Application: Exploded - FromModules, si es que no se agrega automaticamente
