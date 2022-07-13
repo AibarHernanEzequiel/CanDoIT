@@ -1,13 +1,11 @@
 package api.clima.controladores;
 
-import api.clima.modelo.Clima;
+import api.clima.dto.ClimaDTO;
 import api.clima.servicios.ServicioAPI;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
+import org.springframework.web.servlet.ModelAndView;;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -29,49 +27,38 @@ public class TestControladorAPI {
     }
 
     @Test
-    public void cuandoUnUsuarioSoliciteVerlosClimasDeberiaMostrarseUnaListaConClimas() {
+    public void cuando_un_usuario_ingrese_deberia_mostrar_una_lista_climas() {
         givenQueUnUsuarioIngresaAlSitio();
-        whenSolicitaVerEListadoDeClimas();
-        thenDeberiaMostrarUnListadoDeClimas(this.modelAndView);
+        whenSolicitaVerUnaListaDeClimas();
+        thenDeberiaMostrarEsaLista();
     }
 
     @Test
-    public void cuandoPidoAlServicioUnaListaDeClimasDeberiaObtenerUnaListaYVerificarQueSeLLameAlMetodoDelServicio() {
-        givenDadoQueSolicitoAlServicioUnaListaDeClimas();
-        whenSolicitaVerEListadoDeClimas();
-        thenDeberiaMostrarUnListadoDeClimas(this.modelAndView);
+    public void cuando_solicito_al_servicio_una_lista_de_climas_deberia_devoler_una_lista_de_climas() {
+        givenQueElServicioDevueleUnaListaDeClimas();
+        whenSolicitaVerUnaListaDeClimas();
+        thenDeberiaMostrarEsaLista();
         andVerificarQueSeLlameAlMetodoDelServicio();
     }
 
     private void givenQueUnUsuarioIngresaAlSitio() {
-
     }
 
-    private void givenDadoQueSolicitoAlServicioUnaListaDeClimas() {
-        List<Clima> climas = obtenerClimas();
-        when(servicioAPI.obtenerListadoDeClimasDelRepositorio()).thenReturn(climas);
+    private void givenQueElServicioDevueleUnaListaDeClimas() {
+        when(servicioAPI.obtenerListaDeClimas()).thenReturn(List.of(new ClimaDTO(), new ClimaDTO()));
     }
 
-    private List<Clima> obtenerClimas() {
-        List<Clima> climas = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            climas.add(new Clima());
-        }
-        return climas;
+    private void whenSolicitaVerUnaListaDeClimas() {
+        this.modelAndView = this.controladorAPI.mostrarListaDeClimas(this.modelMap);
     }
 
-    private void whenSolicitaVerEListadoDeClimas() {
-        this.modelAndView = controladorAPI.mostrarListaDeClimas(this.modelMap);
-    }
-
-
-    private void thenDeberiaMostrarUnListadoDeClimas(ModelAndView modelAndView) {
+    private void thenDeberiaMostrarEsaLista() {
         assertThat(modelAndView.getViewName()).isEqualTo("index");
         assertThat(modelAndView.getModelMap().get("listaDeClimas")).isNotNull();
         assertThat(modelAndView.getModelMap().get("listaDeClimas")).isInstanceOf(List.class);
     }
 
     private void andVerificarQueSeLlameAlMetodoDelServicio() {
-        verify(servicioAPI, times(1)).obtenerListadoDeClimasDelRepositorio();
+        verify(servicioAPI, times(1)).obtenerListaDeClimas();
     }
 }

@@ -1,5 +1,6 @@
 package api.clima.servicios;
 
+import api.clima.dto.ClimaDTO;
 import api.clima.modelo.Clima;
 import api.clima.repositorios.RepositorioAPI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,32 +27,9 @@ public class ServicioAPIImpl implements ServicioAPI {
         this.repositorioAPI = repositorioAPI;
     }
 
-    @Override
-    public List<Clima> obtenerListadoDeClimasDeLaAPI() {
-        return Arrays.asList(restTemplate.getForObject("https://ws.smn.gob.ar/map_items/weather", Clima[].class));
-    }
 
     @Override
-    public void guardarListaObtenidaEnELRepositorio(List<Clima> climas) {
-        repositorioAPI.guardarAPI(climas);
-    }
-
-    @Override
-    public List<Clima> obtenerListadoDeClimasDelRepositorio() {
-        List<Clima> climas = repositorioAPI.obtenerTodosLosClimas();
-        if (climas.isEmpty()) {
-            List<Clima> climasDeLaAPI = this.obtenerListadoDeClimasDeLaAPI();
-            this.guardarListaObtenidaEnELRepositorio(climasDeLaAPI);
-            return repositorioAPI.obtenerTodosLosClimas();
-        }
-        return climas;
-    }
-
-    @Override
-    //@Scheduled(cron = "0/5 * * * * *") cada 5 segundos
-    @Scheduled(cron = "0 0/5 * * * *")
-    public void consumirYPersistirAPICada5Minutos() {
-        List<Clima> climasDeLaAPI = this.obtenerListadoDeClimasDeLaAPI();
-        repositorioAPI.actualizarRepositorio(climasDeLaAPI);
+    public List<ClimaDTO> obtenerListaDeClimas() {
+        return null;
     }
 }

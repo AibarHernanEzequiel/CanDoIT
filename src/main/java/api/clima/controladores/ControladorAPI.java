@@ -1,5 +1,6 @@
 package api.clima.controladores;
 
+import api.clima.dto.ClimaDTO;
 import api.clima.modelo.Clima;
 import api.clima.servicios.ServicioAPI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,13 @@ public class ControladorAPI {
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public ModelAndView mostrarListaDeClimas(ModelMap model) {
-        List<Clima> climas = obtenerListaDeClimas();
+        List<ClimaDTO> climas = obtenerListaDeClimas();
         model.put("listaDeClimas", climas);
         return new ModelAndView("index", model);
     }
 
-    private List<Clima> obtenerListaDeClimas() {
-        return servicioAPI.obtenerListadoDeClimasDelRepositorio();
+    private List<ClimaDTO> obtenerListaDeClimas() {
+        return servicioAPI.obtenerListaDeClimas();
     }
 }
 
