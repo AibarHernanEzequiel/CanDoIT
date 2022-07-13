@@ -21,7 +21,6 @@ public class RepositorioAPIImpl implements RepositorioAPI {
     public void guardarAPI(List<Clima> climas) {
         for (Clima clima : climas) {
             sessionFactory.getCurrentSession().save(clima);
-            sessionFactory.getCurrentSession().save(clima.getWeather());
         }
     }
 

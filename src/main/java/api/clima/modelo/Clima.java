@@ -12,7 +12,7 @@ public class Clima {
     private String province;
     @Column
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Weather weather;
 
     public Clima() {
