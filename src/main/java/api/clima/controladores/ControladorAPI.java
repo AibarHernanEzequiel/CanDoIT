@@ -1,10 +1,8 @@
 package api.clima.controladores;
 
 import api.clima.dto.ClimaDTO;
-import api.clima.modelo.Clima;
 import api.clima.servicios.ServicioAPI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +31,7 @@ public class ControladorAPI {
     }
 
     private List<ClimaDTO> obtenerListaDeClimas() {
-        return servicioAPI.obtenerListaDeClimas();
+        return servicioAPI.obtenerListaDeClimasDTO();
     }
 }
 

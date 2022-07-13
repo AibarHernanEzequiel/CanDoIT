@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,16 +21,22 @@ public class ServicioAPIImpl implements ServicioAPI {
 
     private RestTemplate restTemplate;
     private RepositorioAPI repositorioAPI;
+    private ServicioModelMapper servicioModelMapper;
 
     @Autowired
-    public ServicioAPIImpl(RestTemplate restTemplate, RepositorioAPI repositorioAPI) {
+    public ServicioAPIImpl(RestTemplate restTemplate, RepositorioAPI repositorioAPI, ServicioModelMapper servicioModelMapper) {
         this.restTemplate = restTemplate;
         this.repositorioAPI = repositorioAPI;
+        this.servicioModelMapper = servicioModelMapper;
     }
 
 
     @Override
-    public List<ClimaDTO> obtenerListaDeClimas() {
-        return null;
+    public List<ClimaDTO> obtenerListaDeClimasDTO() {
+        return this.servicioModelMapper.mapearObejetoDeDominioADTO(this.obtenerClimasDelRepositorio());
+    }
+
+    private List<Clima> obtenerClimasDelRepositorio() {
+        return this.repositorioAPI.obtenerTodosLosClimas();
     }
 }

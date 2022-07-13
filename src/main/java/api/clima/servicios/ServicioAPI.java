@@ -7,5 +7,5 @@ import java.util.List;
 
 @EnableScheduling
 public interface ServicioAPI {
-    List<ClimaDTO> obtenerListaDeClimas();
+    List<ClimaDTO> obtenerListaDeClimasDTO();
 }

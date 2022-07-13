@@ -45,7 +45,7 @@ public class TestControladorAPI {
     }
 
     private void givenQueElServicioDevueleUnaListaDeClimas() {
-        when(servicioAPI.obtenerListaDeClimas()).thenReturn(List.of(new ClimaDTO(), new ClimaDTO()));
+        when(servicioAPI.obtenerListaDeClimasDTO()).thenReturn(List.of(new ClimaDTO(), new ClimaDTO()));
     }
 
     private void whenSolicitaVerUnaListaDeClimas() {
@@ -59,6 +59,6 @@ public class TestControladorAPI {
     }
 
     private void andVerificarQueSeLlameAlMetodoDelServicio() {
-        verify(servicioAPI, times(1)).obtenerListaDeClimas();
+        verify(servicioAPI, times(1)).obtenerListaDeClimasDTO();
     }
 }
