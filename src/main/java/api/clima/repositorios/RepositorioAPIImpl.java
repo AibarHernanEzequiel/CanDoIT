@@ -17,28 +17,14 @@ public class RepositorioAPIImpl implements RepositorioAPI {
         this.sessionFactory = sessionFactory;
     }
 
-    @Override
-    public void guardarAPI(List<Clima> climas) {
-        for (Clima clima : climas) {
-            sessionFactory.getCurrentSession().save(clima);
-        }
-    }
 
     @Override
     public List<Clima> obtenerTodosLosClimas() {
-        return sessionFactory.getCurrentSession().createQuery("select c from Clima c", Clima.class).list();
+        return null;
     }
 
     @Override
-    public void actualizarRepositorio(List<Clima> climasDeLaAPI) {
-        List<Clima> climasDelRepositorio = this.obtenerTodosLosClimas();
-        if (climasDelRepositorio.isEmpty()) {
-            this.guardarAPI(climasDeLaAPI);
-        } else {
-            for (Clima clima : climasDelRepositorio) {
-                sessionFactory.getCurrentSession().delete(clima);
-            }
-            this.guardarAPI(climasDeLaAPI);
-        }
+    public void persistirDatosDeLaAPI(List<Clima> climasDeLaAPI) {
+
     }
 }

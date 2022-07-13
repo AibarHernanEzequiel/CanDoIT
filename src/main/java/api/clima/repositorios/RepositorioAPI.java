@@ -5,8 +5,6 @@ import api.clima.modelo.Clima;
 import java.util.List;
 
 public interface RepositorioAPI {
-    void guardarAPI(List<Clima> climas);
     List<Clima> obtenerTodosLosClimas();
-
-    void actualizarRepositorio(List<Clima> climasDeLaAPI);
+    void persistirDatosDeLaAPI(List<Clima> climasDeLaAPI);
 }

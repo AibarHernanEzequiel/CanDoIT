@@ -5,12 +5,10 @@ import api.clima.modelo.Clima;
 import api.clima.repositorios.RepositorioAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,22 +19,38 @@ public class ServicioAPIImpl implements ServicioAPI {
 
     private RestTemplate restTemplate;
     private RepositorioAPI repositorioAPI;
-    private ServicioModelMapper servicioModelMapper;
+    private final String URL = "https://ws.smn.gob.ar/map_items/weather";
+    private ServicioModelMapper servicioModelMapper = new ServicioModelMapper();
 
     @Autowired
-    public ServicioAPIImpl(RestTemplate restTemplate, RepositorioAPI repositorioAPI, ServicioModelMapper servicioModelMapper) {
+    public ServicioAPIImpl(RestTemplate restTemplate, RepositorioAPI repositorioAPI) {
         this.restTemplate = restTemplate;
         this.repositorioAPI = repositorioAPI;
-        this.servicioModelMapper = servicioModelMapper;
     }
 
+    @Override
+    public List<ClimaDTO> consumirAPI() {
+        return Arrays.asList(restTemplate.getForObject(URL, ClimaDTO[].class));
+    }
+
+    @Override
+    public void guardarDatosObtenidosDeLaAPI(List<ClimaDTO> climaDTOList) {
+        List<Clima> climasDeLaAPI = servicioModelMapper.mapearDTOAObjetoDeDominio(climaDTOList);
+        repositorioAPI.persistirDatosDeLaAPI(climasDeLaAPI);
+    }
 
     @Override
     public List<ClimaDTO> obtenerListaDeClimasDTO() {
-        return this.servicioModelMapper.mapearObejetoDeDominioADTO(this.obtenerClimasDelRepositorio());
+        List<Clima> climas = this.obtenerClimasDelRepositorio();
+        return servicioModelMapper.mapearObejetoDeDominioADTO(climas);
     }
 
     private List<Clima> obtenerClimasDelRepositorio() {
-        return this.repositorioAPI.obtenerTodosLosClimas();
+        List<Clima> climas = this.repositorioAPI.obtenerTodosLosClimas();
+        if (climas.isEmpty()) {
+            this.repositorioAPI.persistirDatosDeLaAPI(climas);
+            return this.repositorioAPI.obtenerTodosLosClimas();
+        }
+        return climas;
     }
 }

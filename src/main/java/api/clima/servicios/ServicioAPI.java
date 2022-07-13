@@ -7,5 +7,9 @@ import java.util.List;
 
 @EnableScheduling
 public interface ServicioAPI {
+    List<ClimaDTO> consumirAPI();
+
+    void guardarDatosObtenidosDeLaAPI(List<ClimaDTO> climaDTOList);
+
     List<ClimaDTO> obtenerListaDeClimasDTO();
 }
