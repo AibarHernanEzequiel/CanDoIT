@@ -3,6 +3,7 @@ package api.clima.servicios;
 import api.clima.modelo.Clima;
 import api.clima.repositorios.RepositorioAPI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@EnableScheduling
 public class ServicioAPIImpl implements ServicioAPI {
 
     private RestTemplate restTemplate;
@@ -45,4 +47,11 @@ public class ServicioAPIImpl implements ServicioAPI {
         return climas;
     }
 
+    @Override
+    //@Scheduled(cron = "0/5 * * * * *") cada 5 segundos
+    @Scheduled(cron = "0 0/5 * * * *")
+    public void consumirYPersistirAPICada5Minutos() {
+        List<Clima> climasDeLaAPI = this.obtenerListadoDeClimasDeLaAPI();
+        repositorioAPI.actualizarRepositorio(climasDeLaAPI);
+    }
 }

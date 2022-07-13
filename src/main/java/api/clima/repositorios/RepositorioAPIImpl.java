@@ -29,4 +29,17 @@ public class RepositorioAPIImpl implements RepositorioAPI {
     public List<Clima> obtenerTodosLosClimas() {
         return sessionFactory.getCurrentSession().createQuery("select c from Clima c", Clima.class).list();
     }
+
+    @Override
+    public void actualizarRepositorio(List<Clima> climasDeLaAPI) {
+        List<Clima> climasDelRepositorio = this.obtenerTodosLosClimas();
+        if (climasDelRepositorio.isEmpty()) {
+            this.guardarAPI(climasDeLaAPI);
+        } else {
+            for (Clima clima : climasDelRepositorio) {
+                sessionFactory.getCurrentSession().delete(clima);
+            }
+            this.guardarAPI(climasDeLaAPI);
+        }
+    }
 }

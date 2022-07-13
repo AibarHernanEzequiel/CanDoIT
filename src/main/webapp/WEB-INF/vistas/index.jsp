@@ -37,6 +37,5 @@
         </tbody>
     </table>
 </div>
-${nuevaLista}
 </body>
 </html>
