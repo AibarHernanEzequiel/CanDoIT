@@ -8,6 +8,9 @@ public class Clima {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long identity;
+
+    @Column
+    private String id;
     @Column
     private String province;
     @Column
@@ -49,5 +52,13 @@ public class Clima {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String _id) {
+        this.id = _id;
     }
 }
