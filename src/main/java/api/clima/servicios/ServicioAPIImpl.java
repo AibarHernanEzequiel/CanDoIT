@@ -20,8 +20,11 @@ public class ServicioAPIImpl implements ServicioAPI {
 
     private RestTemplate restTemplate;
     private RepositorioAPI repositorioAPI;
-    private final String URL = ServicioUrl.obtenerUrlAPIDeArchivoProperties();
     private ServicioModelMapper servicioModelMapper = new ServicioModelMapper();
+
+
+    @Autowired
+    private UrlAPI urlAPI;
 
     @Autowired
     public ServicioAPIImpl(RestTemplate restTemplate, RepositorioAPI repositorioAPI) {
@@ -31,7 +34,7 @@ public class ServicioAPIImpl implements ServicioAPI {
 
     @Override
     public List<ClimaDTO> consumirAPI() {
-        return Arrays.asList(restTemplate.getForObject(URL, ClimaDTO[].class));
+        return Arrays.asList(restTemplate.getForObject(urlAPI.getUrl_api(), ClimaDTO[].class));
     }
 
     @Override
