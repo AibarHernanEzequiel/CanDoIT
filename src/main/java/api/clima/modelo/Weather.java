@@ -8,6 +8,8 @@ public class Weather {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long identity;
     @Column
+    private int id;
+    @Column
     private float temp;
     @Column
     private String tempDesc;
@@ -38,5 +40,13 @@ public class Weather {
 
     public void setTempDesc(String tempDesc) {
         this.tempDesc = tempDesc;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

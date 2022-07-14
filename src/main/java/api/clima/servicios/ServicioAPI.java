@@ -14,4 +14,6 @@ public interface ServicioAPI {
     List<ClimaDTO> obtenerListaDeClimasDTO();
 
     void actualizarRepositorio(List<ClimaDTO> climaDTOList);
+
+    void consumirYPersistirCada5Minutos();
 }

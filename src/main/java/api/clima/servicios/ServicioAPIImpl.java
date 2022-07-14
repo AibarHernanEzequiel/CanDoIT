@@ -5,6 +5,7 @@ import api.clima.modelo.Clima;
 import api.clima.repositorios.RepositorioAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -51,10 +52,18 @@ public class ServicioAPIImpl implements ServicioAPI {
         this.repositorioAPI.actualizarRepositorio(climaList);
     }
 
+    //@Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0/5 * * * * *")
+    @Override
+    public void consumirYPersistirCada5Minutos() {
+        List<ClimaDTO> climaDTOList = this.consumirAPI();
+        this.actualizarRepositorio(climaDTOList);
+    }
+
     private List<Clima> obtenerClimasDelRepositorio() {
         List<Clima> climas = this.repositorioAPI.obtenerTodosLosClimas();
-        if (climas.isEmpty()) {
-            this.repositorioAPI.persistirDatosDeLaAPI(climas);
+        if (climas.isEmpty() || climas == null) {
+            this.guardarDatosObtenidosDeLaAPI(consumirAPI());
             return this.repositorioAPI.obtenerTodosLosClimas();
         }
         return climas;

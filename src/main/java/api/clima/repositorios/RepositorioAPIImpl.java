@@ -26,7 +26,9 @@ public class RepositorioAPIImpl implements RepositorioAPI {
 
     @Override
     public void persistirDatosDeLaAPI(List<Clima> climasDeLaAPI) {
-        for (Clima clima : climasDeLaAPI) getSession().save(clima);
+        for (Clima clima : climasDeLaAPI) {
+            getSession().save(clima);
+        }
     }
 
     @Override
@@ -34,17 +36,19 @@ public class RepositorioAPIImpl implements RepositorioAPI {
         List<Clima> todosLosClimas = this.obtenerTodosLosClimas();
         for (Clima clima : todosLosClimas) {
             for (Clima climaActualizado : climasActualizados) {
-                if (clima.getId().equals(climaActualizado.getId())) {
-                    clima.getWeather().setTemp(climaActualizado.getWeather().getTemp());
-                    clima.getWeather().setTempDesc(climaActualizado.getWeather().getTempDesc());
+                if (esElMismoIdDelWeather(clima, climaActualizado)) {
+                    setearDatosAActualizar(clima, climaActualizado);
                     getSession().update(clima);
                 }
             }
         }
     }
 
+    private boolean esElMismoIdDelWeather(Clima clima, Clima climaActualizado) {
+        return clima.getWeather().getId() == climaActualizado.getWeather().getId();
+    }
 
-    private void setearCampos(Clima clima, Clima climaActualizado) {
+    private void setearDatosAActualizar(Clima clima, Clima climaActualizado) {
         clima.getWeather().setTemp(climaActualizado.getWeather().getTemp());
         clima.getWeather().setTempDesc(climaActualizado.getWeather().getTempDesc());
     }
