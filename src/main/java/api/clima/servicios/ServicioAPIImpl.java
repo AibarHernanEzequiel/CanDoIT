@@ -20,7 +20,7 @@ public class ServicioAPIImpl implements ServicioAPI {
 
     private RestTemplate restTemplate;
     private RepositorioAPI repositorioAPI;
-    private final String URL = "https://ws.smn.gob.ar/map_items/weather";
+    private final String URL = ServicioUrl.obtenerUrlAPIDeArchivoProperties();
     private ServicioModelMapper servicioModelMapper = new ServicioModelMapper();
 
     @Autowired
