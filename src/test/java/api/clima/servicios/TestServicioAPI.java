@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -16,12 +17,13 @@ import static org.mockito.Mockito.*;
 public class TestServicioAPI {
 
     private ServicioAPI servicioAPI;
+    private RestTemplate restTemplate;
     private RepositorioAPI repositorioAPI;
 
     @Before
     public void setup() {
         repositorioAPI = mock(RepositorioAPI.class);
-        RestTemplate restTemplate = new RestTemplate();
+        restTemplate = new RestTemplate();
         servicioAPI = new ServicioAPIImpl(restTemplate, this.repositorioAPI);
     }
 
@@ -41,8 +43,19 @@ public class TestServicioAPI {
         andVerificarQueSeLlameAlMetodoDelRepositorio();
     }
 
-    private void givenQueElRepositorioDevuelveUnaListaVacia() {
-        when(repositorioAPI.obtenerTodosLosClimas()).thenReturn(null);
+    @Test
+    public void cuando_actualizo_el_repo_deberia_llamar_al_metodo_actualizar_y_la_lista_no_deberia_estar_vacia() {
+        List<ClimaDTO> actualizada = givenQueReciboDatosAcutalizadosDeUnaAPi();
+        whenActualizoElRepositorio(actualizada);
+        whenObtengoTodosLosClimas();
+        thenLaListaNoDeberiaEstarVacia();
+        andThenDeberiaVerificarQueLlameAlMetodoDelRepositorio();
+
+    }
+
+    private void whenObtengoTodosLosClimas() {
+        List<Clima> climas = Arrays.asList(restTemplate.getForObject("https://ws.smn.gob.ar/map_items/weather", Clima[].class));
+        when(repositorioAPI.obtenerTodosLosClimas()).thenReturn(climas);
     }
 
     private void givenQueEnElRepositorioHayUnaListaDeClimas() {
@@ -50,16 +63,20 @@ public class TestServicioAPI {
         when(this.repositorioAPI.obtenerTodosLosClimas()).thenReturn(climaList);
     }
 
+    private void givenQueElRepositorioDevuelveUnaListaVacia() {
+        when(repositorioAPI.obtenerTodosLosClimas()).thenReturn(new ArrayList<>());
+    }
+
+    private List<ClimaDTO> givenQueReciboDatosAcutalizadosDeUnaAPi() {
+        return servicioAPI.consumirAPI();
+    }
+
     private List<ClimaDTO> whenSolicitoAlRepositorioUnaListaDeClimas() {
         return this.servicioAPI.obtenerListaDeClimasDTO();
     }
 
-    private void thenDeberiaObtenerUnaListaDeClimasDTO(List<ClimaDTO> climaDTOList) {
-        assertThat(climaDTOList.stream().iterator().next()).isInstanceOf(ClimaDTO.class);
-    }
-
-    private void andVerificarQueSeLlamoAlMetodoDelRepositorio() {
-        verify(repositorioAPI, times(1)).obtenerTodosLosClimas();
+    private void whenActualizoElRepositorio(List<ClimaDTO> actualizada) {
+        servicioAPI.actualizarRepositorio(actualizada);
     }
 
     private List<Clima> agregarClimasALaLista() {
@@ -70,12 +87,28 @@ public class TestServicioAPI {
         return climaList;
     }
 
+    private void thenDeberiaObtenerUnaListaDeClimasDTO(List<ClimaDTO> climaDTOList) {
+        assertThat(climaDTOList.stream().iterator().next()).isInstanceOf(ClimaDTO.class);
+    }
+
     private void thenDeberiaConsumirLaAPIyPersistirla() {
         List<ClimaDTO> climaDTOList = servicioAPI.consumirAPI();
         servicioAPI.guardarDatosObtenidosDeLaAPI(climaDTOList);
     }
 
+    private void andVerificarQueSeLlamoAlMetodoDelRepositorio() {
+        verify(repositorioAPI, times(1)).obtenerTodosLosClimas();
+    }
+
     private void andVerificarQueSeLlameAlMetodoDelRepositorio() {
         verify(repositorioAPI, times(2)).persistirDatosDeLaAPI(any());
+    }
+
+    private void andThenDeberiaVerificarQueLlameAlMetodoDelRepositorio() {
+        verify(repositorioAPI, times(1)).actualizarRepositorio(any());
+    }
+
+    private void thenLaListaNoDeberiaEstarVacia() {
+        assertThat(servicioAPI.obtenerListaDeClimasDTO()).isNotEmpty();
     }
 }

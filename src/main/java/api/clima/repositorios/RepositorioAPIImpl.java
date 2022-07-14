@@ -27,4 +27,9 @@ public class RepositorioAPIImpl implements RepositorioAPI {
     public void persistirDatosDeLaAPI(List<Clima> climasDeLaAPI) {
 
     }
+
+    @Override
+    public void actualizarRepositorio(List<Clima> climas) {
+
+    }
 }

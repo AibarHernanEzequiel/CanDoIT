@@ -45,6 +45,12 @@ public class ServicioAPIImpl implements ServicioAPI {
         return servicioModelMapper.mapearObejetoDeDominioADTO(climas);
     }
 
+    @Override
+    public void actualizarRepositorio(List<ClimaDTO> climaDTOList) {
+        List<Clima> climaList = servicioModelMapper.mapearDTOAObjetoDeDominio(climaDTOList);
+        this.repositorioAPI.actualizarRepositorio(climaList);
+    }
+
     private List<Clima> obtenerClimasDelRepositorio() {
         List<Clima> climas = this.repositorioAPI.obtenerTodosLosClimas();
         if (climas.isEmpty()) {

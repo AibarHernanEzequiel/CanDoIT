@@ -12,4 +12,6 @@ public interface ServicioAPI {
     void guardarDatosObtenidosDeLaAPI(List<ClimaDTO> climaDTOList);
 
     List<ClimaDTO> obtenerListaDeClimasDTO();
+
+    void actualizarRepositorio(List<ClimaDTO> climaDTOList);
 }
